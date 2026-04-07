@@ -1,0 +1,114 @@
+// USERS (CLIENT + TRAINER)
+users [icon: user, color: blue] {
+  user_id int pk
+  name string
+  email string
+  phone string
+  role string
+  created_at timestamp
+}
+
+// TRAINER PROFILE
+trainers [icon: activity, color: purple] {
+  trainer_id int pk
+  user_id int
+  specialization string
+  experience_years int
+  bio string
+}
+
+// CLIENT PROFILE
+clients [icon: users, color: blue] {
+  client_id int pk
+  user_id int
+  age int
+  gender string
+  height decimal
+  goal string
+}
+
+// PLANS / PROGRAMS
+plans [icon: package, color: green] {
+  plan_id int pk
+  trainer_id int
+  plan_name string
+  description string
+  duration_weeks int
+  price decimal
+}
+
+
+// SUBSCRIPTIONS
+subscriptions [icon: repeat, color: green] {
+  subscription_id int pk
+  client_id int
+  plan_id int
+  start_date date
+  end_date date
+  status string
+}
+
+// SESSIONS / CONSULTATIONS
+sessions [icon: video, color: orange] {
+  session_id int pk
+  trainer_id int
+  client_id int
+  session_type string
+  scheduled_at timestamp
+  status string
+  notes string
+}
+
+// CHECK-INS
+checkins [icon: clipboard, color: red] {
+  checkin_id int pk
+  client_id int
+  subscription_id int
+  weight decimal
+  body_fat decimal
+  notes string
+  submitted_at timestamp
+}
+
+// PROGRESS TRACKING
+progress [icon: trending-up, color: red] {
+  progress_id int pk
+  client_id int
+  checkin_id int
+  chest decimal
+  waist decimal
+  hips decimal
+  trainer_notes string
+}
+
+// PAYMENTS
+payments [icon: credit-card, color: yellow] {
+  payment_id int pk
+  subscription_id int
+  amount decimal
+  payment_method string
+  payment_status string
+  paid_at timestamp
+}
+
+
+// RELATIONSHIPS
+
+users.user_id > trainers.user_id
+users.user_id > clients.user_id
+
+trainers.trainer_id > plans.trainer_id
+
+clients.client_id > subscriptions.client_id
+plans.plan_id > subscriptions.plan_id
+
+trainers.trainer_id > sessions.trainer_id
+clients.client_id > sessions.client_id
+
+clients.client_id > checkins.client_id
+subscriptions.subscription_id > checkins.subscription_id
+
+clients.client_id > progress.client_id
+checkins.checkin_id > progress.checkin_id
+
+subscriptions.subscription_id > payments.subscription_id
